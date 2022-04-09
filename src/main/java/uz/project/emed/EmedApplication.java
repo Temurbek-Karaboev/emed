@@ -9,5 +9,4 @@ public class EmedApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EmedApplication.class, args);
 	}
-
 }
