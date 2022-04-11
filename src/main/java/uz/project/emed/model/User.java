@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user_info")
 @NoArgsConstructor
 @Data
 public class User {
@@ -14,6 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_sec")
     @SequenceGenerator(name = "user_sec", sequenceName = "user_sec", allocationSize = 1)
     private Long id;
+    private String name;
     private String gender;
     @Column(name = "birthday_date")
     private Long birthdayDate;
