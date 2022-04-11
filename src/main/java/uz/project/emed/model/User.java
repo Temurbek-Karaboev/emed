@@ -29,6 +29,7 @@ public class User {
     private String step;
     private String language;
     private boolean status;
+    private boolean done;
 
 
 

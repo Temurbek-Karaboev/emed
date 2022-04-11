@@ -1,24 +1,26 @@
 package uz.project.emed.dto;
 
 
-public class LoadBase {
-    private static String name= "";
+
+public class UserDTO {
+    private static   String name= "";
     private static String gender ="";
     private static Long birthdayDate=0L;
     private static String homeAddress="";
     private static String phoneNumber="";
     private static Long tgID=0L;
     private static String tgUsername="";
-    private  static String step="";
+    private static  String step="welcome";
     private static String language="uz";
     private static boolean status=false;
+    private static boolean done=false;
 
     public static String getName() {
         return name;
     }
 
     public static void setName(String name) {
-        LoadBase.name = name;
+        UserDTO.name = name;
     }
 
     public static String getGender() {
@@ -26,7 +28,7 @@ public class LoadBase {
     }
 
     public static void setGender(String gender) {
-        LoadBase.gender = gender;
+        UserDTO.gender = gender;
     }
 
     public static Long getBirthdayDate() {
@@ -34,7 +36,7 @@ public class LoadBase {
     }
 
     public static void setBirthdayDate(Long birthdayDate) {
-        LoadBase.birthdayDate = birthdayDate;
+        UserDTO.birthdayDate = birthdayDate;
     }
 
     public static String getHomeAddress() {
@@ -42,7 +44,7 @@ public class LoadBase {
     }
 
     public static void setHomeAddress(String homeAddress) {
-        LoadBase.homeAddress = homeAddress;
+        UserDTO.homeAddress = homeAddress;
     }
 
     public static String getPhoneNumber() {
@@ -50,7 +52,7 @@ public class LoadBase {
     }
 
     public static void setPhoneNumber(String phoneNumber) {
-        LoadBase.phoneNumber = phoneNumber;
+        UserDTO.phoneNumber = phoneNumber;
     }
 
     public static Long getTgID() {
@@ -58,7 +60,7 @@ public class LoadBase {
     }
 
     public static void setTgID(Long tgID) {
-        LoadBase.tgID = tgID;
+        UserDTO.tgID = tgID;
     }
 
     public static String getTgUsername() {
@@ -66,7 +68,7 @@ public class LoadBase {
     }
 
     public static void setTgUsername(String tgUsername) {
-        LoadBase.tgUsername = tgUsername;
+        UserDTO.tgUsername = tgUsername;
     }
 
     public static String getStep() {
@@ -74,7 +76,7 @@ public class LoadBase {
     }
 
     public static void setStep(String step) {
-        LoadBase.step = step;
+        UserDTO.step = step;
     }
 
     public static String getLanguage() {
@@ -82,7 +84,7 @@ public class LoadBase {
     }
 
     public static void setLanguage(String language) {
-        LoadBase.language = language;
+        UserDTO.language = language;
     }
 
     public static boolean isStatus() {
@@ -90,7 +92,15 @@ public class LoadBase {
     }
 
     public static void setStatus(boolean status) {
-        LoadBase.status = status;
+        UserDTO.status = status;
+    }
+
+    public static boolean isDone() {
+        return done;
+    }
+
+    public static void setDone(boolean done) {
+        UserDTO.done = done;
     }
 }
 

@@ -1,153 +1,135 @@
 package uz.project.emed.function;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
-import uz.project.emed.dto.LoadBase;
+import uz.project.emed.dto.UserDTO;
 import uz.project.emed.service.Language;
+import uz.project.emed.service.UserService;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class UserFunction {
-    private static String send = "default";
+    private static   String send = "default";
     private static String[] selectLang = {};
     private static Message message;
-    private static int[] admins;
+    private static long[] admins;
+    private final UserService userService;
 
     private static final Map<String, Function<String, String>> userMethods = new HashMap<String, Function<String, String>>() {
         {
             put("welcome", (a) -> {
                 send = "Assalomu Aleykum! \nЗдравствуйте! ";
-                LoadBase.setStep("chooseLang");
+                UserDTO.setStep("chooseLang");
                 return null;
             });
             put("chooseLang", (a) -> {
                 if (a.equals("ru \uD83C\uDDF7\uD83C\uDDFA")) {
-                    send = "Ваше имя?";
-                    LoadBase.setLanguage("ru");
-                    LoadBase.setStep("userName");
-                }
-                else {
-                    send = "Ismingiz?";
-                    LoadBase.setStep("userName");
+                    UserDTO.setLanguage("ru");
+                    send = "Ваши Ф. И. О.";
+                    UserDTO.setStep("name");
+                } else {
+                    send = selectLang[3];
+                    UserDTO.setStep("name");
                 }
                 return null;
             });
             put("name", (a) -> {
-                if (a.equals(selectLang[0]+" ↩")){
-                    send = "Assalomu Aleykum! \nЗдравствуйте! \nWelcome!";
-                    LoadBase.setStep("welcome");
+                if (a.equals(selectLang[0] + " ↩")) {
+                    send = "Assalomu Aleykum! \nЗдравствуйте!";
+                    UserDTO.setStep("chooseLang");
                 } else {
-                    LoadBase.setName(a);
-                    send = selectLang[1];
-                    LoadBase.setStep("phone");
+                    UserDTO.setName(a);
+                    send = selectLang[2];
+                    System.err.println(UserDTO.getName());
+                    UserDTO.setStep("gender");
                 }
                 return null;
             });
-            put("phone", (a) -> {
-                send = selectLang[4];
-                if (a.equals(selectLang[0]+" ↩")){
+
+            put("gender", (a) -> {
+                if (a.equals(selectLang[0] + " ↩")) {
                     send = selectLang[3];
-                    LoadBase.setStep("name");
-                } else if (a.equals("default")){
-                    send = selectLang[7];
-                    LoadBase.setPhoneNumber(message.getContact().getPhoneNumber());
-
-                    LoadBase.setStep("mainMenu");
-                }
-                else {
-                    boolean onOff = false;
-                    String checkNumber = a.replaceAll(" ", "");
-
-
-                    try {
-                        int convert = Integer.parseInt(checkNumber);
-                        LoadBase.setPhoneNumber(a);
-                        onOff = true;
-                    } catch (Exception e) {
-                    }
-                    if (onOff){
-                        send = selectLang[7];
-                        LoadBase.setStep("mainMenu");
-                        LoadBase.setPhoneNumber(a);
-                    }
+                    UserDTO.setStep("name");
+                } else {
+                    UserDTO.setGender(a);
+                    send = selectLang[6];
+                    System.err.println(UserDTO.getGender());
+                    UserDTO.setStep("birthday");
                 }
                 return null;
             });
-            put("mainMenu", (a) -> {
-                if (a.equals(selectLang[6] + " \uD83D\uDCDD")) {
-                    LoadBase.setStep("Menu");
-                    send = a;
 
-                } else if (a.equals(selectLang[5] + " \uD83D\uDC45")) {
-                    if(LoadBase.getLanguage().equals("ru")){
-                        send="Добро пожаловать!";
-                        LoadBase.setLanguage("ru");
-                    }else {
-                        LoadBase.setLanguage("uz");
-                        send="Hush kelibsiz!";
-                    }
+            put("birthday", (a) -> {
+                if (a.equals(selectLang[0] + " ↩")) {
+                    send = selectLang[6];
+                    UserDTO.setStep("gender");
+                } else {
+                        if (timeConverter(a) != null) {
+                            try{                        UserDTO.setBirthdayDate(timeConverter(a));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            send = selectLang[8];
+                            System.err.println(UserDTO.getBirthdayDate());
+                            UserDTO.setStep("address");
+                        }
+                        else {
+                            send=selectLang[11];
+                            UserDTO.setStep("birthday");
+
+                        }
+                        }
+
+                return null;}
+            );
+
+            put("address", (a) -> {
+                if (a.equals(selectLang[0] + " ↩")) {
+                    send = selectLang[6];
+
+                } else {
+                    UserDTO.setHomeAddress(a);
+                    send = selectLang[1];
+                    System.err.println(UserDTO.getHomeAddress());
+                    UserDTO.setStep("phone");
                 }
                 return null;
             });
-//            put("Menu", (a) -> {
-//                if (a.equals(selectLang[0]+" ↩")){
-//                    send = selectLang[7];
-//                    LoadBase.setStep("mainMenu");
-//                }else if (a.equals(selectLang[8] + " \uD83C\uDF10")||
-//                        a.equals("IT Start" + " \uD83D\uDDA5")||
-//                        a.equals("Office Pro (*New) \uD83D\uDCF1")||
-//                        a.equals("DevOps (*New) \uD83E\uDDD1\u200D\uD83D\uDCBB")||
-//                        a.equals("Frontend (HTML, CSS, JAVACRIPT) \uD83D\uDDBC")||
-//                        a.equals("React JS ⚛")||
-//                        a.equals("Vue JS ✅")||
-//                        a.equals("PHP \uD83C\uDD7FH\uD83C\uDD7F")||
-//                        a.equals("Java ☕")||
-//                        a.equals("C# #️⃣")||
-//                        a.equals("Flutter")||
-//                        a.equals("AutoCAD \uD83C\uDD70")||
-//                        a.equals("Cinema 4D \uD83D\uDD35")||
-//                        a.equals("Unity \uD83C\uDFAE")||
-//                        a.equals("Unreal Engine 4 \uD83C\uDFAE")
-//                ){
-//                    send = selectLang[11];
-//                    LoadBase.setCourse(a);
-//                    LoadBase.setStep("Time");
-//
-//                }
-//                return null;
-//            });
-//            put("Time", (a) -> {
-//                if (a.equals(selectLang[13])|| a.equals(selectLang[14])){
-//                    LoadBase.setTime(a);
-//                    send = selectLang[12];
-//                    Main main = new Main();
-//                    String sendMessage = "Yangi murojat"+ "\nUser Name: " +LoadBase.getUserName()+ "\nCourse: " + LoadBase.getCourse() + "\nPhone: " + LoadBase.getPhoneNumber()
-//                            + "\nTime: "  + LoadBase.getTime() + "\nId: "+ LoadBase.getUserId() + "\nUser Tg Name: @" +message.getFrom().getUserName();
-//                    for (int id : admins){
-//                        main.sendMessageToId(sendMessage,id);
-//                    }
-//                    LoadBase.setStep("Menu");
-//                }
-//                else if (a.equals(selectLang[0]+" ↩")){
-//                    LoadBase.setStep("Menu");
-//                    send = selectLang[7];
-//                }
-//                return null;
-//            });
-//            put("End", (a) -> {
-//                if (a.equals(selectLang[0]+" ↩")){
-//                    LoadBase.setStep("Menu");
-//                }
-//                return null;
-//            });
+
+            put("phone", (a) -> {
+                if (a.equals(selectLang[0] + " ↩")) {
+                    send = selectLang[8];
+                    UserDTO.setStep("address");
+                }  else {
+                    UserDTO.setPhoneNumber(a);
+                    System.err.println(UserDTO.getPhoneNumber());
+                    UserDTO.setStep("last");
+                }
+                return null;
+            });
+
+            put("last", (a) -> {
+                System.err.println("BBBOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOLLLLLLLLLLLLLLLLLLLLIIIII");
+                UserDTO.setStep("done");
+                send= "boldiku";
+//                userService.saveNewUser(LoadBase);
+
+
+                return null;
+            });
+
 
         }
     };
 
-    public UserFunction(Message message,int[] admins) {
-        UserFunction.message = message;
-        switch (LoadBase.getLanguage()){
+    public UserFunction(Message message, UserService userService) {
+        this.userService = userService;
+        switch (UserDTO.getLanguage()) {
             case "uz":
                 selectLang = Language.getUz();
                 break;
@@ -155,16 +137,30 @@ public class UserFunction {
                 selectLang = Language.getRu();
                 break;
         }
-        Function<String,String> result = userMethods.get(LoadBase.getStep());
+        Function<String, String> result = userMethods.get(UserDTO.getStep());
         if (result != null) {
-            if (message.getText() != null){
+            if (message.getText() != null) {
                 result.apply(message.getText());
+            } else if (Objects.equals(UserDTO.getStep(), "phone")) {
+                String number = message.getContact().getPhoneNumber();
+                result.apply(number);
             } else {
                 result.apply("default");
             }
         }
     }
 
+    public static Long timeConverter(String birthday)  {
+        try {
+            DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+            Date date = formatter.parse(birthday);
+
+            return date.getTime();
+        }catch (Exception e){
+            return null;
+        }
+
+    }
 
     public static String getSend() {
         return send;

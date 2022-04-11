@@ -14,16 +14,11 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import uz.project.emed.function.UserFunction;
 import uz.project.emed.keyboard.UserKeyboard;
-import uz.project.emed.model.User;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -34,10 +29,10 @@ public class TelegramBotHandler extends TelegramLongPollingBot {
     private static String send = "default";
     private static String[] selectLang = {};
     private static Message message;
-    private static final int[] admins = {1047067789};
+    private static final Long[] admins = {1047067789L};
 
 
-    public static final Map<Long, String> steps = new HashMap<>();
+    public  final Map<Long, String> steps = new HashMap<>();
 
     void setLanguage(String lang) {
         String[] selectLang = {};
@@ -53,11 +48,42 @@ public class TelegramBotHandler extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        System.out.println("start");
         Message message = update.getMessage();
-        User user = new User();
-        Long userId = message.getChatId();
+        SendMessage sendMessage = new SendMessage();
+        boolean isAdmin = false;
+        for (Long id : admins) {
+            if (message.getFrom().getId() == id) {
+                isAdmin = true;
+            }
+        }
+        if (!isAdmin) {
+            new UserFunction(message, userService);
+            sendMessage.setChatId(String.valueOf(message.getChatId()));
+            sendMessage.setText(UserFunction.getSend());
+            new UserKeyboard(sendMessage);
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        } else {
+                sendMessageToId("You are admin", message.getChatId());
+            }
 
+        }
+
+        public void sendMessageToId(String message, long userId) {
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(String.valueOf(userId));
+            sendMessage.setText(message);
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+
+            System.err.println("Global End!");
+        }
 
 
 
@@ -103,46 +129,45 @@ public class TelegramBotHandler extends TelegramLongPollingBot {
             userService.saveNewUser(user1);
         }
 * */
-
-        System.err.println(userService.getStep(userId));
-
-        if (user.isStatus()) {
-            sender(message, "You are admin!");
-
-        } else {
-
-            ////////////Methods for user
-
-        }
-
-
-        System.err.println("Global End!");
-
-    }
+//
+//        System.err.println(userService.getStep(userId));
+//
+//        if (user.isStatus()) {
+//            sender(message, "You are admin!");
+//
+//        } else {
+//
+//            ////////////Methods for user
+//
+//        }
 
 
-    public void sender(User user, Message message, String text) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(message.getChatId()));
-        sendMessage.setText(text);
-        new UserKeyboard(sendMessage, user, steps.get(user.getTgID()));
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void sender(Message message, String text) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(message.getChatId()));
-        sendMessage.setText(text);
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
+
+
+
+//    public void sender(User user, Message message, String text) {
+//        SendMessage sendMessage = new SendMessage();
+//        sendMessage.setChatId(String.valueOf(message.getChatId()));
+//        sendMessage.setText(text);
+//        new UserKeyboard(sendMessage, user, steps.get(user.getTgID()));
+//        try {
+//            execute(sendMessage);
+//        } catch (TelegramApiException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void sender(Message message, String text) {
+//        SendMessage sendMessage = new SendMessage();
+//        sendMessage.setChatId(String.valueOf(message.getChatId()));
+//        sendMessage.setText(text);
+//        try {
+//            execute(sendMessage);
+//        } catch (TelegramApiException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     @Value("${telegrambot.name}")
@@ -177,13 +202,7 @@ public class TelegramBotHandler extends TelegramLongPollingBot {
         }
     }
 
-    public long timeConverter(String birthday) throws ParseException {
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-        Date date = formatter.parse(birthday);
-        long dateInLong = date.getTime();
 
-        return dateInLong;
-    }
 
 //    String getterStep(Long tgID){
 //        return userService.getStep(tgID);
