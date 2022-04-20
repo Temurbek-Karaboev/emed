@@ -1,54 +1,88 @@
 package uz.project.emed.service;
 
 public class Language {
-    private static final String[] uz = {
+    private  final String[] uz = {
             // 0
             "Ortga qaytish",
             // 1
-            "Telefon raqamingizni yuboring",
+            "Telefon raqamingiz",
             // 2
-            "Yuborish",
+            "Jinsingiz",
             // 3
-            "Ismingiz",
+            "F. I. Sh.",
             // 4
-            "Raqamni quyidagicha kiriting \n12 3456789",
+            "Raqamni qayta yuboring !",
             // 5
             "Tilni o'zgartirish",
             // 6
-            "Kursga yozilish",
+            "Tug'ilgan kuningiz (kun.oy.yil)",
             // 7
             "Hush kelibsiz!",
             // 8
-            "IT olamiga kirish",
+            "Yashash manzilgiz",
             // 9
-            "Kompyuter savodxonligi",
+            "Erkak",
             // 10
-            "Ma'lumot",
+            "Ayol",
             // 11
-            "Qulay vaqtni tanlang",
+            "XATO ! (01.01.1990) kabi kiriting qilib kiriting ! ",
             // 12
-            "Siz ro'yxatdan muvoffaqiyatli o'tdingiz, siz bilan telefon yoki telegram bot orqali aloqaga chiqamiz",
-            // 13
-            "Ertalab",
+            "Barcha kiritgan ma'lumotlaringizni tasdiqlaysizmi?\n To'g'riliga ishonchingiz komilmi?",
+            //13
+            "Albatta",
             // 14
-            "Kechqurun",
+            "Yo'q",
+            // 15
+            "Muvaffaqiyatli ro'yxatdan o'tdingiz !",
+            //16
+            "Barcha ma'lumotlaringizni qaytadan kiriting !",
+            //17
+            "Xato! Bittasini tanlang!",
+            //18
+            "Mening kabinetim",
+            //19
+            "Qidiruv",
+            //20
+            "Mening ma'lumotlarim",
+            //21
+            "Hozirgi muolaja",
+            //22
+            "Med. tarix",
+            //23
+            "Qabul qilinish kerak bo'gan dorilar",
+            //24
+            "Telegram ID",
+            //25
+            "Telegram username",
+            //26
+            "Tanlagan til",
+            //27
+            "Bosh menyuga qaytish ↩",
+            //28
+            "Ma'lumotlarni tahrirlash",
+            //29
+            "Akkauntni o'chirish",
+            //30
+            "Bosh Menyu",
+            //31
+            "Akkauntingizni o'chirishni tasdiqlaysizmi?"
 
     };
-    private static final String[] ru = {"Назад", "Отправьте свой номер","Отправить",
-            "Ваше имя","Пожалуйста введите как примере \n12 3456789","Поменять язык","Подписаться на курс",
-            "Добро пожаловать!","Знакомство с миром ИТ","Компьютерная грамотность","Информация","выберите удобное время",
-            "Вы успешно зарегистрировались, мы с вами свяжемся через телефоном или телеграм ботом","Утром","Вечером"
-
-
+    private  final String[] ru = {"Назад", "Номер телефона","Ваш Пол",
+            "Ваши Ф.И.О","Пожалуйста, нажмите на кнопку \" Номер телефона \" ","Поменять язык","День вашего рождение (дд.мм.гггг)",
+            "Добро пожаловать!","Адрес проживания","Мужчина","Женщина","Ошибка! Введите данные правильно !(01.01.1990)",
+            "Вы подтверждаете всю введённую информацию?\nВы уверены?","Конечно !","Нет","Успешно зарегистрировались !", "Повторно введите всю информацию!",
+            "Неверно, Выберите один вариант!", "Мой кабинет", "Поиск", "Мои данные", "Текущее лечение", "История болезни", "Лекарства",
+            "Телеграм ID", "Телеграм ссылка", "Выбранный язык", "Вернуться в Меню ↩", "Редактирование данных", "Удалить аккаунт", "Главное Меню", "Вы подтверждаете удаление своего аккаунта?"
 
     };
 
 
-    public static String[] getUz() {
+    public  String[] getUz() {
         return uz;
     }
 
-    public static String[] getRu() {
+    public  String[] getRu() {
         return ru;
     }
 
